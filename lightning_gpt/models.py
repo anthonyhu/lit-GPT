@@ -132,7 +132,7 @@ class NanoGPT(LightningModule):
         weight_decay: float = 0.1,
         learning_rate: float = 3e-4,
         betas: Tuple[float, float] = (0.9, 0.95),
-        device_type: str = "cpu",
+        device_type: str = "cuda",
     ):
         super().__init__()
         self.save_hyperparameters()

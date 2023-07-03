@@ -83,7 +83,7 @@ def main(args):
     trainer = L.Trainer.from_argparse_args(
         args,
         max_epochs=10,
-        gradient_clip_val=1.0,
+        #gradient_clip_val=1.0,
         callbacks=callback_list,
         accelerator="auto",
         devices="auto",
