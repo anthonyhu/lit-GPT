@@ -132,7 +132,7 @@ class NanoGPT(LightningModule):
         weight_decay: float = 0.1,
         learning_rate: float = 3e-4,
         betas: Tuple[float, float] = (0.9, 0.95),
-        device_type: str = "cuda",
+        device_type: str = "cpu",
     ):
         super().__init__()
         self.save_hyperparameters()
@@ -253,7 +253,10 @@ class DeepSpeedNanoGPT(NanoGPT):
         self.save_hyperparameters()
 
     def configure_optimizers(self) -> torch.optim.Optimizer:
+        # just to get param group
+        self.hparams.device_type = 'cpu'
         optimizer = super().configure_optimizers()
+        self.hparams.device_type = 'cuda'
 
         return _get_deepspeed_optimizer(
             optimizer,
