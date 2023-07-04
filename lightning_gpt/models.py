@@ -247,20 +247,16 @@ class DeepSpeedNanoGPT(NanoGPT):
                 "Please set either `fused_adam` or `offload` to False."
             )
 
-        kwargs["device_type"] = "cuda" if fused_adam or kwargs.pop("device_type", "cpu") == "cuda" else "cpu"
-
         super().__init__(**kwargs)
         self.save_hyperparameters()
 
     def configure_optimizers(self) -> torch.optim.Optimizer:
         # just to get param group
-        self.hparams.device_type = 'cpu'
         optimizer = super().configure_optimizers()
-        self.hparams.device_type = 'cuda'
 
         return _get_deepspeed_optimizer(
             optimizer,
-            fused_adam=self.hparams.device_type == "cuda",
+            fused_adam=self.hparams.fused_adam,
             cpu_offload=self.hparams.offload,
             learning_rate=self.hparams.learning_rate,
             betas=self.hparams.betas,
