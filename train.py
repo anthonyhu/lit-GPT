@@ -44,6 +44,7 @@ def main(args):
         else:
             raise ValueError(f"Implementation {args.implementation} not supported with DeepSpeed")
         extra_kwargs["offload"] = False
+        extra_kwargs['activation_checkpointing'] = args.activation_checkpointing
 
     elif args.strategy == "fsdp_native":
         if GPT_class == models.MinGPT:
@@ -114,6 +115,7 @@ if __name__ == "__main__":
     parser.add_argument("--num_workers", default=4, type=int)
     parser.add_argument("--compile", default=None, choices=[None, "dynamo"])
     parser.add_argument("--implementation", default="mingpt", choices=["mingpt", "nanogpt"])
+    parser.add_argument("--activation_checkpointing", default=False, type=bool)
     args = parser.parse_args()
 
     main(args)

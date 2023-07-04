@@ -11,6 +11,7 @@ import math
 import inspect
 from dataclasses import dataclass
 
+import deepspeed
 import torch
 import torch.nn as nn
 from torch.nn import functional as F
@@ -121,6 +122,7 @@ class GPTConfig:
     n_embd: int = 768
     dropout: float = 0.0
     bias: bool = True # True: bias in Linears and LayerNorms, like GPT-2. False: a bit better and faster
+    activation_checkpointing: bool = False
 
 class GPT(nn.Module):
 
@@ -189,7 +191,10 @@ class GPT(nn.Module):
         pos_emb = self.transformer.wpe(pos) # position embeddings of shape (1, t, n_embd)
         x = self.transformer.drop(tok_emb + pos_emb)
         for block in self.transformer.h:
-            x = block(x)
+            if self.config.activation_checkpointing:
+                x = deepspeed.checkpointing.checkpoint(block, x)
+            else:
+                x = block(x)
         x = self.transformer.ln_f(x)
 
         if targets is not None:
