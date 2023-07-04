@@ -43,7 +43,12 @@ def main(args):
             GPT_class = models.DeepSpeedNanoGPT
         else:
             raise ValueError(f"Implementation {args.implementation} not supported with DeepSpeed")
-        extra_kwargs["offload"] = False
+        if 'offload' in args.strategy:
+            extra_kwargs["fused_adam"] = False
+            extra_kwargs["offload"] = True
+        else:
+            extra_kwargs["fused_adam"] = True
+            extra_kwargs["offload"] = False
         extra_kwargs['activation_checkpointing'] = args.activation_checkpointing
 
     elif args.strategy == "fsdp_native":
