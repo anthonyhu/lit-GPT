@@ -31,7 +31,7 @@ def main(args):
 
     elif args.implementation == "nanogpt":
         GPT_class = models.NanoGPT
-        extra_kwargs["dropout"] = 0.1
+        extra_kwargs["dropout"] = 0.0
 
     else:
         raise ValueError(f"Unsupported implementation {args.implementation}")
