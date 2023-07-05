@@ -51,7 +51,7 @@ def main(args):
             extra_kwargs["offload"] = False
         extra_kwargs['activation_checkpointing'] = args.activation_checkpointing
 
-    elif args.strategy == "fsdp_native":
+    elif 'fsdp' in args.strategy:
         if GPT_class == models.MinGPT:
             GPT_class = models.FSDPMinGPT
         elif GPT_class == models.NanoGPT:
