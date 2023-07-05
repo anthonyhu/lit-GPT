@@ -12,6 +12,7 @@ def main(args):
     with urlopen("https://cs.stanford.edu/people/karpathy/char-rnn/shakespeare_input.txt") as f:
         text = f.read()
 
+    text = text[:1000000]
     train_dataset = data.CharDataset(text, args.block_size)
 
     train_loader = DataLoader(train_dataset, batch_size=args.batch_size, num_workers=args.num_workers)
