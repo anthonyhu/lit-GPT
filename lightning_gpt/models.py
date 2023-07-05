@@ -297,7 +297,7 @@ def _register_gpt_strategy() -> None:
     from torch.distributed.fsdp import BackwardPrefetch
     from torch.distributed.fsdp.wrap import transformer_auto_wrap_policy
 
-    if "fsdp-gpt" in StrategyRegistry.available_strategies():
+    if "fsdp_gpt" in StrategyRegistry.available_strategies():
         return
 
     auto_wrap_policy = functools.partial(
@@ -305,7 +305,7 @@ def _register_gpt_strategy() -> None:
     )
 
     StrategyRegistry.register(
-        name="fsdp-gpt",
+        name="fsdp_gpt",
         strategy=DDPFullyShardedNativeStrategy,
         description="FSDP strategy with memory optimizations enabled for GPT large scale pretraining.",
         auto_wrap_policy=auto_wrap_policy,
