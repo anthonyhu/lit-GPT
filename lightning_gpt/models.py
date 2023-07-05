@@ -38,6 +38,9 @@ MINGPT_PRESETS = {
     '6.4B': dict(n_layer=32, n_head=32, n_embd=4096),
     '10B': dict(n_layer=32, n_head=40, n_embd=5120),
     '13B': dict(n_layer=40, n_head=40, n_embd=5120),
+    '20B': dict(n_layer=50, n_head=50, n_embd=6400),
+    '32B': dict(n_layer=60, n_head=52, n_embd=6656),
+    '65B': dict(n_layer=80, n_head=64, n_embd=8192),
 }
 
 
