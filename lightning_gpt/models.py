@@ -31,6 +31,13 @@ MINGPT_PRESETS = {
     "gpt-mini": dict(n_layer=6, n_head=6, n_embd=192),
     "gpt-micro": dict(n_layer=4, n_head=4, n_embd=128),
     "gpt-nano": dict(n_layer=3, n_head=3, n_embd=48),
+    '0.7B': dict(n_layer=24, n_head=16, embed_dim=1536),
+    '1.5B': dict(n_layer=24, n_head=18, embed_dim=2304),
+    '2.7B': dict(n_layer=24, n_head=24, embed_dim=3072),
+    '4.8B': dict(n_layer=24, n_head=32, embed_dim=4096),
+    '6.4B': dict(n_layer=32, n_head=32, embed_dim=4096),
+    '10B': dict(n_layer=32, n_head=40, embed_dim=5120),
+    '13B': dict(n_layer=40, n_head=40, embed_dim=5120),
 }
 
 
