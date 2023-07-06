@@ -133,15 +133,17 @@ class GPT(nn.Module):
         assert config.block_size is not None
         self.config = config
 
-        # transformer = [
-        #     checkpoint_wrapper(block, offload_to_cpu=self.activation_offloading) for block in transformer
-        # ]
-        
+
+        transformer = [Block(config) for _ in range(config.n_layer)]
+        transformer = [
+            checkpoint_wrapper(block) for block in transformer
+        ]
+
         self.transformer = nn.ModuleDict(dict(
             wte = nn.Embedding(config.vocab_size, config.n_embd),
             wpe = nn.Embedding(config.block_size, config.n_embd),
             drop = nn.Dropout(config.dropout),
-            h = nn.ModuleList([checkpoint_wrapper(Block(config)) for _ in range(config.n_layer)]),
+            h = nn.ModuleList(transformer),
             ln_f = LayerNorm(config.n_embd, bias=config.bias),
         ))
         self.lm_head = nn.Linear(config.n_embd, config.vocab_size, bias=False)
@@ -196,10 +198,7 @@ class GPT(nn.Module):
         pos_emb = self.transformer.wpe(pos) # position embeddings of shape (1, t, n_embd)
         x = self.transformer.drop(tok_emb + pos_emb)
         for block in self.transformer.h:
-            if self.config.activation_checkpointing:
-                x = deepspeed.checkpointing.checkpoint(block, x)
-            else:
-                x = block(x)
+            x = block(x)
         x = self.transformer.ln_f(x)
 
         if targets is not None:
