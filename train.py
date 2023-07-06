@@ -81,7 +81,7 @@ def main(args):
             )
         model = torch.compile(model)
 
-    callback_list = []
+    callback_list = [L.pytorch.callbacks.ModelSummary(-1)]
 
     if torch.cuda.is_available():
         torch.set_float32_matmul_precision("high")
@@ -89,7 +89,7 @@ def main(args):
 
     trainer = L.Trainer.from_argparse_args(
         args,
-        #strategy=L.pytorch.strategies.DDPStrategy(find_unused_parameters=True),
+        strategy=L.pytorch.strategies.DDPStrategy(find_unused_parameters=False),
         max_epochs=10,
         #gradient_clip_val=1.0,
         callbacks=callback_list,
