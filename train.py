@@ -36,29 +36,29 @@ def main(args):
 
     else:
         raise ValueError(f"Unsupported implementation {args.implementation}")
-
-    if 'deepspeed' in args.strategy:
-        if GPT_class == models.MinGPT:
-            GPT_class = models.DeepSpeedMinGPT
-        elif GPT_class == models.NanoGPT:
-            GPT_class = models.DeepSpeedNanoGPT
-        else:
-            raise ValueError(f"Implementation {args.implementation} not supported with DeepSpeed")
-        if 'offload' in args.strategy:
-            extra_kwargs["fused_adam"] = False
-            extra_kwargs["offload"] = True
-        else:
-            extra_kwargs["fused_adam"] = True
-            extra_kwargs["offload"] = False
-        extra_kwargs['activation_checkpointing'] = args.activation_checkpointing
-
-    elif 'fsdp' in args.strategy:
-        if GPT_class == models.MinGPT:
-            GPT_class = models.FSDPMinGPT
-        elif GPT_class == models.NanoGPT:
-            GPT_class = models.FSDPNanoGPT
-        else:
-            raise ValueError(f"Implementation {args.implementation} not supported with FSDP")
+    #
+    # if 'deepspeed' in args.strategy:
+    #     if GPT_class == models.MinGPT:
+    #         GPT_class = models.DeepSpeedMinGPT
+    #     elif GPT_class == models.NanoGPT:
+    #         GPT_class = models.DeepSpeedNanoGPT
+    #     else:
+    #         raise ValueError(f"Implementation {args.implementation} not supported with DeepSpeed")
+    #     if 'offload' in args.strategy:
+    #         extra_kwargs["fused_adam"] = False
+    #         extra_kwargs["offload"] = True
+    #     else:
+    #         extra_kwargs["fused_adam"] = True
+    #         extra_kwargs["offload"] = False
+    #     extra_kwargs['activation_checkpointing'] = args.activation_checkpointing
+    #
+    # elif 'fsdp' in args.strategy:
+    #     if GPT_class == models.MinGPT:
+    #         GPT_class = models.FSDPMinGPT
+    #     elif GPT_class == models.NanoGPT:
+    #         GPT_class = models.FSDPNanoGPT
+    #     else:
+    #         raise ValueError(f"Implementation {args.implementation} not supported with FSDP")
 
     model = GPT_class(
         vocab_size=train_dataset.vocab_size,
@@ -89,6 +89,7 @@ def main(args):
 
     trainer = L.Trainer.from_argparse_args(
         args,
+        #strategy=L.pytorch.strategies.DDPStrategy(find_unused_parameters=True),
         max_epochs=10,
         #gradient_clip_val=1.0,
         callbacks=callback_list,
