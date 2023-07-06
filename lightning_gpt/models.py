@@ -7,6 +7,7 @@ from lightning import LightningModule
 from lightning.pytorch.strategies.deepspeed import _DEEPSPEED_AVAILABLE
 from lightning_utilities.core.overrides import is_overridden
 
+
 import mingpt.model
 import mingpt.trainer
 import nanogpt.model
