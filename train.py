@@ -86,15 +86,9 @@ def main(args):
     if torch.cuda.is_available():
         torch.set_float32_matmul_precision("high")
         callback_list.append(callbacks.CUDAMetricsCallback())
-
-    from lightning.pytorch.strategies import FSDPStrategy
-    import nanogpt.model
-    fsdp = FSDPStrategy(
-        activation_checkpointing=nanogpt.model.Block,  # or pass a list with multiple types
-    )
     
     trainer = L.Trainer(
-        strategy=fsdp,
+        strategy=args.strategy,
         max_epochs=10,
         #gradient_clip_val=1.0,
         callbacks=callback_list,

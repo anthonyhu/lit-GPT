@@ -294,7 +294,8 @@ class FSDPNanoGPT(NanoGPT):
 
 
 def _register_gpt_strategy() -> None:
-    from lightning.pytorch.strategies import StrategyRegistry, FSDPStrategy
+    from lightning.pytorch.strategies import StrategyRegistry
+    from lightning.pytorch.strategies.fsdp import FSDPStrategy
     # from lightning.pytorch.strategies.fully_sharded_native import (
     #     DDPFullyShardedNativeStrategy,
     # )
