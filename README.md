@@ -1,5 +1,9 @@
 # lightning-GPT
 
+# Own comments
+
+`python train.py --implementation nanogpt --batch_size 1 --block_size 8192 --strategy deepdspeed_stage_2 --model_type 1.5B --activation_checkpointing True`
+
 lightning-GPT is a minimal wrapper around Andrej Karpathy's [minGPT](https://github.com/karpathy/minGPT) and [nanoGPT](https://github.com/karpathy/nanoGPT) in Lightning.
 
 It is aimed at providing a minimal Lightning layer on top of minGPT and nanoGPT, while leveraging the full breadth of Lightning.
