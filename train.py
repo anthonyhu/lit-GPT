@@ -110,8 +110,8 @@ if __name__ == "__main__":
     L.seed_everything(42)
 
     parser = ArgumentParser()
-    parser = L.Trainer.add_argparse_args(parser)
 
+    parser.add_argument("--strategy", default='fsdp_gpt', type=str)
     parser.add_argument("--model_type", default="gpt2", type=str)
     parser.add_argument("--n_layer", type=int)
     parser.add_argument("--n_head", type=int)
