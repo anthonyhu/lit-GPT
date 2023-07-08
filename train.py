@@ -87,9 +87,8 @@ def main(args):
         torch.set_float32_matmul_precision("high")
         callback_list.append(callbacks.CUDAMetricsCallback())
 
-    trainer = L.Trainer.from_argparse_args(
-        args,
-        #strategy=L.pytorch.strategies.DDPStrategy(find_unused_parameters=False),
+    trainer = L.Trainer(
+        strategy=args.strategy,
         max_epochs=10,
         #gradient_clip_val=1.0,
         callbacks=callback_list,
