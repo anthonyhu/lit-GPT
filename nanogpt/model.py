@@ -135,9 +135,9 @@ class GPT(nn.Module):
 
 
         transformer = [Block(config) for _ in range(config.n_layer)]
-        # transformer = [
-        #     checkpoint_wrapper(block) for block in transformer
-        # ]
+        transformer = [
+            checkpoint_wrapper(block) for block in transformer
+        ]
 
         self.transformer = nn.ModuleDict(dict(
             wte = nn.Embedding(config.vocab_size, config.n_embd),
@@ -198,10 +198,7 @@ class GPT(nn.Module):
         pos_emb = self.transformer.wpe(pos) # position embeddings of shape (1, t, n_embd)
         x = self.transformer.drop(tok_emb + pos_emb)
         for block in self.transformer.h:
-            if self.config.activation_checkpointing:
-                x = deepspeed.checkpointing.checkpoint(block, x)
-            else:
-                x = block(x)
+            x = block(x)
         x = self.transformer.ln_f(x)
 
         if targets is not None:
